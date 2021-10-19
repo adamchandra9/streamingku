@@ -1,0 +1,16 @@
+{
+  "lang": [
+    {
+      "id": "en",
+      "message": "Hello world"
+    },
+    {
+      "id": "id",
+      "message": "Halo Dunia"
+    },
+    {
+      "id": "fr",
+      "message": "Bonjour le monde"
+    }
+  ]
+}

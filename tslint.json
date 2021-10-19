@@ -1,0 +1,12 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:latest"],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "single", "jsx-double"],
+    "no-duplicate-imports": { "severity": "warn" },
+    "no-submodule-imports": false,
+    "prefer-object-spread": false
+  },
+  "rulesDirectory": []
+}

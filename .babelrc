@@ -1,0 +1,22 @@
+{
+    "presets": [
+        "@babel/preset-react"
+    ],
+    "env": {
+        "production": {
+            "plugins": [
+                "transform-remove-console"
+            ]
+        },
+        "development": {
+            "presets": [
+                [
+                    "@babel/preset-react",
+                    {
+                        "development": true
+                    }
+                ]
+            ]
+        }
+    }
+}
