@@ -3,13 +3,10 @@ import { Action } from 'redux';
 export const initialState: any = {
   siderIsColapse: false,
   isLoading: false,
-  showModalUser: false
+  showModalUser: false,
 };
 
 export interface IComponentAction extends Action<string> {}
-export interface IOpenSiderAction extends IComponentAction {
-  isOpen: boolean;
-}
 export interface ILoadingAction extends IComponentAction {
   isLoading?: boolean;
 }
@@ -26,8 +23,7 @@ export default function ComponentReducer(
 
   switch (action.type) {
     case 'OPEN_SIDER':
-      const openSiderAction = action as IOpenSiderAction;
-      newState.siderIsColapse = openSiderAction.isOpen;
+      newState.siderIsColapse = !state.siderIsColapse;
       return { ...newState };
 
     case 'PROCESS_LOADING': {

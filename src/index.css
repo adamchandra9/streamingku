@@ -1,17 +1,48 @@
-@import "~antd/dist/antd.css";
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
-@import "~react-redux-toastr/lib/css/react-redux-toastr.min.css";
+@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import '~react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.sider {
+  background-color: white;
+  height: 100vh;
+}
+
+.logo {
+  margin: 15px;
+  background-color: #87c0cd;
+  padding: 20px;
+}
+
+.header {
+  background-color: #226597;
+  padding: 0 25px;
+  color: white;
+}
+.iconCollapse {
+  font-size: 20px;
+}
+.content {
+  background-color: #f3f9fb;
+  padding: 20px;
+}
+.btnLogout {
+  border-radius: 10px;
+  background-color: #113f67;
+  border: none;
+  color: white;
+  padding: 0 20px;
 }

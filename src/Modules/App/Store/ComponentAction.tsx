@@ -1,23 +1,22 @@
 export function processLoading(isLoading: boolean) {
   return {
     type: 'PROCESS_LOADING',
-    isLoading
+    isLoading,
   };
 }
-export function collapseSider(isOpen: boolean) {
+export function collapseSider() {
   return {
     type: 'OPEN_SIDER',
-    isOpen
   };
 }
 export function reset() {
   return {
-    type: 'RESET'
+    type: 'RESET',
   };
 }
 export function openModal(component: string) {
   return {
     type: 'SHOW_MODAL',
-    component
+    component,
   };
 }
