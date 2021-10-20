@@ -1,6 +1,7 @@
 @import '~antd/dist/antd.css';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import '~react-redux-toastr/lib/css/react-redux-toastr.min.css';
+@import './Assets/Css/table.css';
 
 body {
   margin: 0;
@@ -45,4 +46,14 @@ code {
   border: none;
   color: white;
   padding: 0 20px;
+}
+.containerLabelTitle {
+  margin-bottom: 30px;
+}
+.labelTitle {
+  background-color: #87c0cd;
+  font-weight: 500;
+  color: white;
+  font-size: 30px;
+  padding: 10px 30px;
 }

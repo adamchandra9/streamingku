@@ -10,7 +10,7 @@ export default function SiderComponent(props) {
   return (
     <Sider collapsed={siderIsCollapse} className="sider">
       <div className="logo" />
-      <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
+      <Menu theme="light" mode="inline">
         <Menu.Item key="1" icon={<DashboardOutlined />}>
           <Link to={`/admin`}>
             <span>Dashboard</span>

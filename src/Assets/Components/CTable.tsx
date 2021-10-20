@@ -1,5 +1,6 @@
-import { Button, Empty, Skeleton } from 'antd';
+import { Button, Empty, InputNumber, Skeleton } from 'antd';
 import {
+  useExpanded,
   useFilters,
   useGlobalFilter,
   usePagination,
@@ -7,8 +8,9 @@ import {
   useTable,
 } from 'react-table';
 
+import CButton from './CButton';
+import CIcon from './CIcon';
 import React from 'react';
-import matchSorter from 'match-sorter';
 
 interface IProps {
   columns;
@@ -16,10 +18,8 @@ interface IProps {
   isLoading?;
   pagination?;
   useFilterGlobal?;
-  pageCount?;
-  onFetchData?;
-  pageIndex?;
-  serverSide?;
+  handleOnDoubleClick?;
+  renderRowSubComponent?;
 }
 
 function GlobalFilter({
@@ -29,8 +29,10 @@ function GlobalFilter({
 }) {
   const count = preGlobalFilteredRows.length;
   return (
-    <span>
-      Search:{' '}
+    <div>
+      <div style={{ float: 'left', width: '5%', height: 40, paddingTop: 10 }}>
+        Search:{' '}
+      </div>
       <input
         id="inputGlobalSearch"
         className="inputSearchGlobalFilter"
@@ -39,8 +41,9 @@ function GlobalFilter({
           setGlobalFilter(e.target.value || undefined);
         }}
         placeholder={`${count} records...`}
+        style={{ float: 'right', width: '95%', height: 40 }}
       />
-    </span>
+    </div>
   );
 }
 
@@ -60,11 +63,6 @@ function DefaultColumnFilter({
     />
   );
 }
-
-function fuzzyTextFilterFn(rows, id, filterValue) {
-  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
-}
-fuzzyTextFilterFn.autoRemove = val => !val;
 
 const renderPaginationOption = data => {
   const {
@@ -90,15 +88,16 @@ const renderPaginationOption = data => {
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </span>
-        <div>
+        <div style={{ marginTop: '5px' }}>
           Go to page:{' '}
-          <input
+          <InputNumber
             id="inputGoToPage"
-            className="inputGoToPageTable"
             type="number"
+            min={1}
+            max={pageOptions.length}
             defaultValue={pageIndex + 1}
             onChange={e => {
-              const pages = e.target.value ? Number(e.target.value) - 1 : 0;
+              const pages = e ? Number(e) - 1 : 0;
               gotoPage(pages);
             }}
             style={{ width: '100px' }}
@@ -121,7 +120,7 @@ const renderPaginationOption = data => {
             type="primary"
             onClick={() => gotoPage(0)}
             disabled={!canPreviousPage}
-            icon="double-left"
+            icon={<CIcon type="DoubleLeftOutlined" />}
             ghost={true}
             id="btnStartPage"
           />{' '}
@@ -129,7 +128,7 @@ const renderPaginationOption = data => {
             type="primary"
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
-            icon="left"
+            icon={<CIcon type="LeftOutlined" />}
             ghost={true}
             id="btnNextPage"
           />{' '}
@@ -137,7 +136,7 @@ const renderPaginationOption = data => {
             type="primary"
             onClick={() => nextPage()}
             disabled={!canNextPage}
-            icon="right"
+            icon={<CIcon type="RightOutlined" />}
             ghost={true}
             id="btnPrevPage"
           />{' '}
@@ -145,7 +144,7 @@ const renderPaginationOption = data => {
             type="primary"
             onClick={() => gotoPage(pageCount - 1)}
             disabled={!canNextPage}
-            icon="double-right"
+            icon={<CIcon type="DoubleRightOutlined" />}
             ghost={true}
             id="btnLastPage"
           />{' '}
@@ -162,21 +161,41 @@ const renderBody = (
   getTableBodyProps,
   page,
   rows,
-  headerGroups
+  headerGroups,
+  handleOnDoubleClick,
+  visibleColumns,
+  renderRowSubComponent
 ) => {
+  const dclickEventHandle = dataRow => {
+    return handleOnDoubleClick ? handleOnDoubleClick(dataRow.original) : null;
+  };
   const renderTbodyData = dataLoop => {
     if (dataLoop.length > 0) {
       return dataLoop.map((row, i) => {
         prepareRow(row);
         return (
-          <tr
-            {...row.getRowProps()}
-            className={i % 2 === 0 ? '' : 'rowTableGrey'}
-          >
-            {row.cells.map(cell => {
-              return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-            })}
-          </tr>
+          <React.Fragment key={`rowTable${i}`}>
+            <tr
+              {...row.getRowProps()}
+              onDoubleClick={() => dclickEventHandle(row)}
+              className={i % 2 === 0 ? '' : 'rowTableGrey'}
+            >
+              {row.cells.map(cell => {
+                return (
+                  <td className="tdRowContentTable" {...cell.getCellProps()}>
+                    {cell.render('Cell')}
+                  </td>
+                );
+              })}
+            </tr>
+            {row.isExpanded ? (
+              <tr>
+                <td colSpan={visibleColumns.length}>
+                  {renderRowSubComponent({ row })}
+                </td>
+              </tr>
+            ) : null}
+          </React.Fragment>
         );
       });
     }
@@ -208,7 +227,7 @@ const renderGlobalFilter = (
 ) => {
   if (useFilterGlobal) {
     return (
-      <tr>
+      <tr className="globalFilter">
         <th
           colSpan={visibleColumns.length}
           style={{
@@ -233,34 +252,77 @@ export default function Table(props: IProps) {
     pagination,
     useFilterGlobal,
     isLoading,
-    serverSide,
-    onFetchData,
-    pageCount: controlledPageCount,
-    pageIndex: controlledPageIndex,
+    handleOnDoubleClick,
+    renderRowSubComponent,
   } = props;
-  const FColumns = React.useMemo(
-    () =>
-      columns.filter(val => {
-        return val !== null;
-      }),
-    [columns]
-  );
-  const filterTypes = React.useMemo(
-    () => ({
-      fuzzyText: fuzzyTextFilterFn,
-      text: (Filter, id, filterValue) => {
-        return Filter.filter(row => {
-          const rowValue = row.values[id];
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true;
-        });
-      },
-    }),
-    []
-  );
+
+  const reSplitAlphaNumeric = /([0-9]+)/gm;
+  function toString(a) {
+    if (typeof a === 'number') {
+      if (isNaN(a) || a === Infinity || a === -Infinity) {
+        return '';
+      }
+      return String(a);
+    }
+    if (typeof a === 'string') {
+      return a.toLocaleLowerCase();
+    }
+    return '';
+  }
+
+  const alphanumeric = (rowA, rowB, columnId) => {
+    let a = getRowValueByColumnID(rowA, columnId);
+    let b = getRowValueByColumnID(rowB, columnId);
+    a = toString(a);
+    b = toString(b);
+
+    a = a.split(reSplitAlphaNumeric).filter(Boolean);
+    b = b.split(reSplitAlphaNumeric).filter(Boolean);
+
+    while (a.length && b.length) {
+      const aa = a.shift();
+      const bb = b.shift();
+
+      const an = parseInt(aa, 10);
+      const bn = parseInt(bb, 10);
+
+      const combo = [an, bn].sort();
+
+      if (isNaN(combo[0])) {
+        if (aa > bb) {
+          return 1;
+        }
+        if (bb > aa) {
+          return -1;
+        }
+        continue;
+      }
+
+      if (isNaN(combo[1])) {
+        return isNaN(an) ? -1 : 1;
+      }
+      if (an > bn) {
+        return 1;
+      }
+      if (bn > an) {
+        return -1;
+      }
+    }
+
+    return a.length - b.length;
+  };
+
+  function getRowValueByColumnID(row, columnId) {
+    return row.values[columnId];
+  }
+
+  const columnsData = columns;
+
+  columnsData.forEach(element => {
+    if (!element.disableSort) {
+      element.sortType = alphanumeric;
+    }
+  });
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -291,27 +353,16 @@ export default function Table(props: IProps) {
     state: { pageIndex, pageSize },
   } = useTable(
     {
-      columns: FColumns,
+      columns: columnsData,
       data,
       defaultColumn,
-      filterTypes,
-      initialState: {
-        pageIndex: serverSide ? controlledPageIndex : 0,
-      },
-      manualPagination: serverSide ? true : false,
-      pageCount: serverSide ? controlledPageCount : Math.ceil(data.length / 10),
     },
     useFilters,
     useGlobalFilter,
     useSortBy,
+    useExpanded,
     usePagination
   );
-
-  React.useEffect(() => {
-    if (onFetchData) {
-      onFetchData({ pageIndex, pageSize });
-    }
-  }, [onFetchData, pageIndex, pageSize]);
 
   const dataPagination = {
     pagination,
@@ -335,6 +386,7 @@ export default function Table(props: IProps) {
           {headerGroups.map(headerGroup => (
             <tr className="trTableHead" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => {
+                const columnIsSortedDesc = column.isSortedDesc ? ' 🔽' : ' 🔼';
                 return (
                   <th
                     {...column.getHeaderProps(
@@ -345,13 +397,7 @@ export default function Table(props: IProps) {
                     className={`thTableHeader ${column.headerClassName}`}
                   >
                     {column.render('Header')}
-                    <span>
-                      {column.isSorted
-                        ? column.isSortedDesc
-                          ? ' 🔽'
-                          : ' 🔼'
-                        : ''}
-                    </span>
+                    <span>{column.isSorted ? columnIsSortedDesc : ''}</span>
                     <div>
                       {column.useFilter === true
                         ? column.render('Filter')
@@ -376,7 +422,10 @@ export default function Table(props: IProps) {
           getTableBodyProps,
           page,
           rows,
-          headerGroups
+          headerGroups,
+          handleOnDoubleClick,
+          visibleColumns,
+          renderRowSubComponent
         )}
       </table>
       {renderPaginationOption(dataPagination)}
@@ -393,16 +442,19 @@ function filterGreaterThan(rows, id, filterValue) {
 
 filterGreaterThan.autoRemove = val => typeof val !== 'number';
 
-export function generateColumnData(data) {
+export function generateColumnData(data, config: any = {}) {
+  const { disableNumberRow } = config;
   const columnData: any[] = [];
-  columnData.push({
-    headerClassName: 'headerDatatableClass',
-    Header: 'No',
-    accessor: 'No',
-    className: 'numberIndexDatatable',
-    Cell: row => parseInt(row.row.id, 10) + 1,
-    width: 35,
-  });
+  if (!disableNumberRow) {
+    columnData.push({
+      headerClassName: 'headerDatatableClass',
+      Header: 'No',
+      accessor: 'No',
+      className: 'numberIndexDatatable',
+      Cell: row => parseInt(row.row.id, 10) + 1,
+      width: 35,
+    });
+  }
   for (const iterator of data) {
     iterator.headerClassName = 'headerDatatableClass';
     iterator.className = 'dataIndexDatatable';
@@ -410,3 +462,49 @@ export function generateColumnData(data) {
   }
   return columnData;
 }
+
+export const renderActionComponent = (
+  isLoading,
+  id,
+  renderData,
+  handleData
+) => {
+  const buttonDataAction = [
+    renderData.renderInfo === true
+      ? {
+          type: 'primary',
+          icon: 'InfoOutlined',
+          onClick: handleData.handleInfo,
+          id: `btnInfo${id}`,
+          className: 'buttonTable',
+        }
+      : null,
+    renderData.renderUpdate === true
+      ? {
+          type: 'primary',
+          icon: 'EditOutlined',
+          onClick: handleData.handleUpdate,
+          id: `btnEdit${id}`,
+          className: 'buttonTable',
+        }
+      : null,
+    renderData.renderDelete === true
+      ? {
+          type: 'danger',
+          icon: 'DeleteOutlined',
+          onClick: handleData.handleRemove,
+          id: `btnDelete${id}`,
+          className: 'buttonTable',
+        }
+      : null,
+  ];
+  return (
+    <div className="containerButtonAction">
+      <CButton
+        buttonData={buttonDataAction}
+        isLoading={isLoading}
+        containerStyle={{ marginBottom: '0px' }}
+      />
+    </div>
+  );
+};

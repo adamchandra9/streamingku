@@ -3,6 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 import DashboardContainer from '../Modules/Dashboard/Container/DashboardContainer';
+import EventContainer from '../Modules/Event/Container/EventContainer';
 import { Helmet } from 'react-helmet';
 import React from 'react';
 import ReduxToastr from 'react-redux-toastr';
@@ -14,6 +15,7 @@ import withTemplate from '../App/WithTemplate';
 function Navigation() {
   const index = StarterPage;
   const dashboard = withTemplate(TemplateContainer, DashboardContainer);
+  const event = withTemplate(TemplateContainer, EventContainer);
   return (
     <React.Fragment>
       <Helmet titleTemplate="React Project" defaultTitle="React Project">
@@ -40,6 +42,11 @@ function Navigation() {
           exact={true}
           path={`${process.env.PUBLIC_URL}/admin`}
           component={dashboard}
+        />
+        <Route
+          exact={true}
+          path={`${process.env.PUBLIC_URL}/admin/event`}
+          component={event}
         />
       </Switch>
     </React.Fragment>

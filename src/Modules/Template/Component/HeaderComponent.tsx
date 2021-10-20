@@ -1,11 +1,20 @@
-import { Button, Col, Layout, Row } from 'antd';
+import { Col, Layout, Row } from 'antd';
 
+import CButton from '../../../Assets/Components/CButton';
 import CIcon from '../../../Assets/Components/CIcon';
 import React from 'react';
 
 const { Header } = Layout;
 export default function HeaderComponent(props) {
   const { siderIsCollapse, collapseSider } = props;
+  const buttonData = [
+    {
+      type: 'primary',
+      className: 'btnLogout',
+      content: 'Logout',
+      id: 'btnLogout',
+    },
+  ];
   return (
     <Header className="header">
       <Row>
@@ -20,7 +29,7 @@ export default function HeaderComponent(props) {
           <span>Admin</span>
         </Col>
         <Col offset={10} span={3}>
-          <Button className="btnLogout">Logout</Button>
+          <CButton buttonData={buttonData} buttonFloat="right" />
         </Col>
       </Row>
     </Header>
