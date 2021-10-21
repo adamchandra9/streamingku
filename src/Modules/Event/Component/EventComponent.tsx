@@ -1,10 +1,11 @@
 import Table, { generateColumnData } from '../../../Assets/Components/CTable';
 
 import CButton from '../../../Assets/Components/CButton';
+import ModalEventContainer from '../Container/ModalEventContainer';
 import React from 'react';
 
 export default function EventComponent(props) {
-  const { column } = props;
+  const { column, addEventClick } = props;
   const dataButton = [
     {
       type: 'primary',
@@ -12,6 +13,7 @@ export default function EventComponent(props) {
       icon: 'PlusOutlined',
       content: 'Add Event',
       id: 'btnAddEvent',
+      onClick: addEventClick,
     },
   ];
   return (
@@ -21,6 +23,7 @@ export default function EventComponent(props) {
       </div>
       <CButton buttonData={dataButton} buttonFloat="right" />
       <Table columns={generateColumnData(column)} data={[]} pagination={true} />
+      <ModalEventContainer />
     </React.Fragment>
   );
 }

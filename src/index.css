@@ -16,7 +16,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
 .sider {
   background-color: white;
   height: 100vh;
@@ -56,4 +55,67 @@ code {
   color: white;
   font-size: 30px;
   padding: 10px 30px;
+}
+.buttonCloseModal {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+}
+.buttonCloseModal:hover {
+  background-color: transparent;
+  border: none;
+  font-weight: bolder;
+  font-size: 20px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+}
+.buttonCloseModal:focus {
+  background-color: transparent;
+  border: none;
+  font-weight: bolder;
+  font-size: 20px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+}
+.headerModal {
+  background: #226597;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.ant-layout.layoutModal {
+  border-radius: 20px;
+  background-color: white;
+}
+.contentModal {
+  padding: 10px;
+  max-height: 500px;
+  overflow: auto;
+}
+.footerModal {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding-top: 10px !important;
+  text-align: center;
+  background: #ffffff;
+}
+.ant-input {
+  width: 50%;
+}
+.containerButtonSubmit {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -24,12 +24,13 @@ const defaultModalstyles = {
     padding: '0px',
     border: 'none',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    marginTop: '50px',
   },
   overlay: {
     background: 'rgba(0, 0, 0, 0.75)',
-    zIndex: '99'
-  }
+    zIndex: '99',
+  },
 };
 
 export default function CModal(props: IProps) {
@@ -42,12 +43,12 @@ export default function CModal(props: IProps) {
     headerComponent,
     footerComponent,
     contentComponent,
-    handleSubmit
+    handleSubmit,
   } = props;
   const renderContent = () => {
     if (isForm) {
       return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} style={{}}>
           <Content className="contentModal">{contentComponent}</Content>
           <Footer className="footerModal">{footerComponent}</Footer>
         </Form>
@@ -71,9 +72,13 @@ export default function CModal(props: IProps) {
           : 'modalStyleContainer modalStyleContainerClose'
       }
     >
-      <Layout>
-        <Button className="buttonCloseModal" onClick={handleCancel}>
-          <CIcon type="close" />
+      <Layout className="layoutModal">
+        <Button
+          type="primary"
+          className="buttonCloseModal"
+          onClick={handleCancel}
+        >
+          <CIcon type={'CloseOutlined'} />
         </Button>
         <Header className="headerModal">{headerComponent}</Header>
         {renderContent()}

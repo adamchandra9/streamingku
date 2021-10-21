@@ -4,6 +4,7 @@ export const initialState: any = {
   siderIsColapse: false,
   isLoading: false,
   showModalUser: false,
+  showModalEvent: false,
 };
 
 export interface IComponentAction extends Action<string> {}

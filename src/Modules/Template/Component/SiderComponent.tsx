@@ -6,17 +6,21 @@ import React from 'react';
 
 const { Sider } = Layout;
 export default function SiderComponent(props) {
-  const { siderIsCollapse } = props;
+  const { siderIsCollapse, location } = props;
   return (
     <Sider collapsed={siderIsCollapse} className="sider">
       <div className="logo" />
-      <Menu theme="light" mode="inline">
-        <Menu.Item key="1" icon={<DashboardOutlined />}>
+      <Menu
+        theme="light"
+        mode="inline"
+        defaultSelectedKeys={[location.pathname]}
+      >
+        <Menu.Item key="/admin" icon={<DashboardOutlined />}>
           <Link to={`/admin`}>
             <span>Dashboard</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<CalendarOutlined />}>
+        <Menu.Item key="/admin/event" icon={<CalendarOutlined />}>
           <Link to={`/admin/event`}>
             <span>Event</span>
           </Link>

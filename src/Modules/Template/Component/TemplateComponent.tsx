@@ -8,7 +8,7 @@ export default function TemplateComponent(props) {
   const { children } = props;
   return (
     <Layout>
-      <SiderContainer />
+      <SiderContainer {...props.children.props} />
       <Layout>
         <HeaderContainer />
         <Content className="content">{children}</Content>

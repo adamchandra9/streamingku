@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+
 const selectorComponent = state => state.ComponentState;
 const selectorAppConfig = state => state.ConfigAppState;
 
@@ -11,3 +12,5 @@ export const makeIsLoading = () =>
 
 export const userModalIsShow = () =>
   createSelector(selectorComponent, state => state.showModalUser);
+export const eventModalIsShow = () =>
+  createSelector(selectorComponent, state => state.showModalEvent);

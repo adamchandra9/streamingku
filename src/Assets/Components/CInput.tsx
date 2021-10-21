@@ -1,4 +1,4 @@
-import { Form, Input, Select } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 
 import CIcon from './CIcon';
 import React from 'react';
@@ -23,13 +23,23 @@ interface IPropsSelect {
   dafaultItemName;
 }
 
+interface IPropsNumber {
+  input?;
+  meta?;
+  placeholder?;
+  idComponent?;
+  label?;
+  min?;
+  max?;
+}
+
 export const InputText = ({
   input,
   meta: { touched, error },
   placeholder,
   idComponent,
   icon,
-  label
+  label,
 }: IPropsText) => {
   const handleOnChange = e => input.onChange(e.target.value);
   const labelTitle = label ? (
@@ -66,7 +76,7 @@ export const InputSelect = ({
   data,
   dafaultItemName,
   idComponent,
-  label
+  label,
 }: IPropsSelect) => {
   const items = data.map((item, key) => (
     <Select.Option
@@ -112,7 +122,7 @@ export const InputPassword = ({
   idComponent,
   icon,
   label,
-  placeholder
+  placeholder,
 }: IPropsText) => {
   const handleOnChange = e => input.onChange(e.target.value);
   const labelTitle = label ? (
@@ -138,6 +148,43 @@ export const InputPassword = ({
         id={idComponent}
         value={input.value}
         placeholder={placeholder}
+      />
+    </Form.Item>
+  );
+};
+
+export const NumberInput = ({
+  input,
+  meta: { touched, error },
+  idComponent,
+  label,
+  min,
+  max,
+}: IPropsNumber) => {
+  const handleOnChange = e => {
+    if (e) {
+      input.onChange(e.target);
+    }
+  };
+  const labelTitle = label ? (
+    <span>
+      <b className="capital">{label}</b>
+    </span>
+  ) : null;
+  return (
+    <Form.Item
+      validateStatus={touched && error !== undefined ? 'error' : ''}
+      help={touched && error !== undefined ? error : ''}
+      label={labelTitle}
+      colon={false}
+    >
+      <InputNumber
+        onChange={handleOnChange}
+        onBlur={input.onBlur}
+        id={idComponent}
+        value={input.value}
+        min={min}
+        max={max}
       />
     </Form.Item>
   );
