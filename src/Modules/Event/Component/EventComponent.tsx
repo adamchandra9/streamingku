@@ -5,7 +5,7 @@ import ModalEventContainer from '../Container/ModalEventContainer';
 import React from 'react';
 
 export default function EventComponent(props) {
-  const { column, addEventClick } = props;
+  const { list, column, addEventClick, isLoading } = props;
   const dataButton = [
     {
       type: 'primary',
@@ -22,7 +22,12 @@ export default function EventComponent(props) {
         <span className="labelTitle">Event</span>
       </div>
       <CButton buttonData={dataButton} buttonFloat="right" />
-      <Table columns={generateColumnData(column)} data={[]} pagination={true} />
+      <Table
+        isLoading={isLoading}
+        columns={generateColumnData(column)}
+        data={list}
+        pagination={true}
+      />
       <ModalEventContainer />
     </React.Fragment>
   );

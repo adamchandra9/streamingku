@@ -1,35 +1,45 @@
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
-import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import { persistReducer, persistStore } from "redux-persist";
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
 
-import AuthState from "../Modules/Auth/Store/AuthReducer";
-import ComponentState from "../Modules/App/Store/ComponentReducer";
-import ConfigAppState from "../Modules/App/Store/AppReducer";
-import Language from "../Modules/Internationalization/languageProviderReducer";
-import Saga from "../Modules/App/Saga/SagaMiddleware";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { connectRouter } from "connected-react-router";
-import createSagaMiddleware from "redux-saga";
-import { reducer as formReducer } from "redux-form";
-import history from "../App/History";
-import storage from "redux-persist/lib/storage";
-import { reducer as toastrReducer } from "react-redux-toastr";
+import AuthState from '../Modules/Auth/Store/AuthReducer';
+import ComponentState from '../Modules/App/Store/ComponentReducer';
+import ConfigAppState from '../Modules/App/Store/AppReducer';
+import EventState from '../Modules/Event/Store/EventReducer';
+import Language from '../Modules/Internationalization/languageProviderReducer';
+import Saga from '../Modules/App/Saga/SagaMiddleware';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { connectRouter } from 'connected-react-router';
+import createSagaMiddleware from 'redux-saga';
+import { reducer as formReducer } from 'redux-form';
+import history from '../App/History';
+import storage from 'redux-persist/lib/storage';
+import { reducer as toastrReducer } from 'react-redux-toastr';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  whitelist: ["AuthState"]
+  whitelist: ['AuthState'],
 };
 
 const combinedReducer = combineReducers({
   AuthState,
   ComponentState,
   ConfigAppState,
+  EventState,
   Language,
   router: connectRouter(history),
   toastr: toastrReducer,
-  form: formReducer.plugin({})
+  form: formReducer.plugin({
+    event: (state, action) => {
+      if (action.type === 'RESET_FORM_EVENT') {
+        return undefined;
+      } else {
+        return state;
+      }
+    },
+  }),
 });
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
@@ -37,9 +47,9 @@ const persistedReducer = persistReducer(persistConfig, combinedReducer);
 const sagaMiddleware = createSagaMiddleware();
 
 const composeEnhancers =
-  process.env.NODE_ENV !== "production" &&
-  typeof window === "object" &&
-  _.has(window, "__REDUX_DEVTOOLS_EXTENSION_COMPOSE__")
+  process.env.NODE_ENV !== 'production' &&
+  typeof window === 'object' &&
+  _.has(window, '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__')
     ? composeWithDevTools({ trace: true, traceLimit: 1000 })
     : compose;
 

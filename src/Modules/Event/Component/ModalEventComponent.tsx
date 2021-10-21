@@ -9,7 +9,7 @@ import { InputRichText } from '../../../Assets/Components/CRichText';
 import React from 'react';
 
 function FormModalEventComponent(props) {
-  const { modalIsShow, handleCancelModal } = props;
+  const { modalIsShow, handleCancelModal, handleSubmit } = props;
   const headerComponent = () => {
     return <span>Create Event</span>;
   };
@@ -20,6 +20,7 @@ function FormModalEventComponent(props) {
         className: 'btnLogout',
         content: 'Submit',
         id: 'btnAddEvent',
+        onClick: handleSubmit,
       },
     ];
     return (
