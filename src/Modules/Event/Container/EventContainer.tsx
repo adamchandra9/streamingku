@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import moment from 'moment';
 
 function EventContainer(props) {
-  const { componentAction, eventAction } = props;
+  const { componentAction, eventAction, detailEvent } = props;
   const addEventClick = () => {
     componentAction.openModal('Event');
     eventAction.setEventModalAction('register');
@@ -38,6 +38,10 @@ function EventContainer(props) {
       eventAction.setEventModalAction('update');
       componentAction.openModal('Event');
     };
+    const settingClick = () => {
+      eventAction.setDetailevent(row.row.original);
+      eventAction.setEventModalAction('register');
+    };
     const dataButton = [
       {
         type: 'link',
@@ -51,6 +55,7 @@ function EventContainer(props) {
         className: 'btnTable',
         content: 'Setting',
         id: 'btnSettingEvent',
+        onClick: () => settingClick(),
       },
     ];
     return <CButton buttonData={dataButton} />;
@@ -77,13 +82,68 @@ function EventContainer(props) {
       Cell: row => renderAction(row),
     },
   ];
+  const renderActionParticipant = () => {
+    const dataButton = [
+      {
+        type: 'link',
+        className: 'btnTable',
+        content: 'View',
+        id: 'btnViewParticipant',
+      },
+      {
+        type: 'link',
+        className: 'btnTable',
+        content: 'Copy Link',
+        id: 'btnCopyLinkParticipant',
+      },
+    ];
+    return <CButton buttonData={dataButton} />;
+  };
+  const listParticipant: any = [];
+  if (detailEvent) {
+    for (const iterator of detailEvent.participant) {
+      listParticipant.push(iterator);
+    }
+  }
+  const columnParticipant = [
+    {
+      Header: 'Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
+    },
+    {
+      Header: 'Phone',
+      accessor: 'phone',
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+    },
+    {
+      Header: 'Action',
+      Cell: row => renderActionParticipant(),
+    },
+  ];
+  console.log(listParticipant);
+
   return (
-    <EventComponent column={column} addEventClick={addEventClick} {...props} />
+    <EventComponent
+      column={column}
+      columnParticipant={columnParticipant}
+      listParticipant={listParticipant}
+      addEventClick={addEventClick}
+      {...props}
+    />
   );
 }
 const mapStateToProps = createStructuredSelector({
   isLoading: SelectorComponent.makeIsLoading(),
   list: SelectorEvent.makeListEventSelector(),
+  modalAction: SelectorEvent.makeModalEventActionSelector(),
+  detailEvent: SelectorEvent.makeDetailEventSelector(),
 });
 
 const mapDispatchToProps = dispatch => ({

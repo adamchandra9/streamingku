@@ -119,6 +119,24 @@ code {
   justify-content: center;
   align-items: center;
 }
-.btnTable{
+.btnTable {
   text-decoration: underline;
+}
+.containerHtmlView {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: 40%;
+  padding: 10px;
+  height: 200px;
+  max-height: 200px;
+  background-color: white;
+  overflow: auto;
+}
+.btnDownload {
+  border-radius: 10px;
+  background-color: #113f67;
+  border: none;
+  color: white;
+  padding: 0 20px;
+  margin-right: 8px;
 }
