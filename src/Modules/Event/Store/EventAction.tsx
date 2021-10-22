@@ -6,6 +6,12 @@ export interface ISetEventModalAction extends Action {
 export interface ISetSubmitEvent extends Action {
   data: object;
 }
+export interface ISetDetailEventAction extends Action {
+  detail: object;
+}
+export interface ISetUpdateEvent extends Action {
+  data: object;
+}
 export function setEventModalAction(modalAction): ISetEventModalAction {
   return {
     type: 'SET_EVENT_MODAL_ACTION',
@@ -21,5 +27,17 @@ export function submitEvent(data): ISetSubmitEvent {
 export function resetFormEvent() {
   return {
     type: 'RESET_FORM_EVENT',
+  };
+}
+export function setDetailevent(detail): ISetDetailEventAction {
+  return {
+    type: 'SET_DETAIL_EVENT',
+    detail,
+  };
+}
+export function updateEvent(data): ISetUpdateEvent {
+  return {
+    type: 'UPDATE_EVENT',
+    data,
   };
 }

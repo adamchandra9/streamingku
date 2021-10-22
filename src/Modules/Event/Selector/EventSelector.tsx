@@ -6,3 +6,5 @@ export const makeModalEventActionSelector = () =>
   createSelector(selectorEvent, state => state.modalAction);
 export const makeListEventSelector = () =>
   createSelector(selectorEvent, state => state.list);
+export const makeDetailEventSelector = () =>
+  createSelector(selectorEvent, state => state.detailEvent);

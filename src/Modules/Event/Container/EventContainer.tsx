@@ -1,6 +1,7 @@
 import * as SelectorComponent from '../../App/Selector/AppSelector';
 import * as SelectorEvent from '../Selector/EventSelector';
 import * as actionComponent from '../../App/Store/ComponentAction';
+import * as actionEvent from '../Store/EventAction';
 
 import { bindActionCreators, compose } from 'redux';
 
@@ -12,9 +13,10 @@ import { createStructuredSelector } from 'reselect';
 import moment from 'moment';
 
 function EventContainer(props) {
-  const { componentAction } = props;
+  const { componentAction, eventAction } = props;
   const addEventClick = () => {
     componentAction.openModal('Event');
+    eventAction.setEventModalAction('register');
   };
   const renderDate = row => {
     const detail = row.row.original;
@@ -31,12 +33,18 @@ function EventContainer(props) {
     return <div>active</div>;
   };
   const renderAction = row => {
+    const editClick = () => {
+      eventAction.setDetailevent(row.row.original);
+      eventAction.setEventModalAction('update');
+      componentAction.openModal('Event');
+    };
     const dataButton = [
       {
         type: 'link',
         className: 'btnTable',
         content: 'Edit',
         id: 'btnEditEvent',
+        onClick: () => editClick(),
       },
       {
         type: 'link',
@@ -80,6 +88,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   componentAction: bindActionCreators(actionComponent, dispatch),
+  eventAction: bindActionCreators(actionEvent, dispatch),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

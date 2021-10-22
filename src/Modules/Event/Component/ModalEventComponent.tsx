@@ -9,9 +9,11 @@ import { InputRichText } from '../../../Assets/Components/CRichText';
 import React from 'react';
 
 function FormModalEventComponent(props) {
-  const { modalIsShow, handleCancelModal, handleSubmit } = props;
+  const { modalIsShow, handleCancelModal, handleSubmit, modalAction } = props;
   const headerComponent = () => {
-    return <span>Create Event</span>;
+    return (
+      <span>{`${modalAction === 'register' ? 'Create' : 'Update'}`} Event</span>
+    );
   };
   const contentComponent = () => {
     const dataButton = [
