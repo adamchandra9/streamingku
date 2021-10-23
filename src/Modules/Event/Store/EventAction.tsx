@@ -12,6 +12,12 @@ export interface ISetDetailEventAction extends Action {
 export interface ISetUpdateEvent extends Action {
   data: object;
 }
+export interface ISetListParticipantAction extends Action {
+  data: any[];
+}
+export interface ISetSubmitParticipantAction extends Action {
+  data: object;
+}
 export function setEventModalAction(modalAction): ISetEventModalAction {
   return {
     type: 'SET_EVENT_MODAL_ACTION',
@@ -38,6 +44,24 @@ export function setDetailevent(detail): ISetDetailEventAction {
 export function updateEvent(data): ISetUpdateEvent {
   return {
     type: 'UPDATE_EVENT',
+    data,
+  };
+}
+export function setListParticipant(data): ISetListParticipantAction {
+  return {
+    type: 'SET_LIST_PARTICIPANT',
+    data,
+  };
+}
+
+export function resetFormParticipant() {
+  return {
+    type: 'RESET_FORM_PARTICIPANT',
+  };
+}
+export function submitParticipant(data): ISetSubmitParticipantAction {
+  return {
+    type: 'SUBMIT_PARTICIPANT',
     data,
   };
 }

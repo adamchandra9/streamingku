@@ -39,6 +39,13 @@ const combinedReducer = combineReducers({
         return state;
       }
     },
+    participant: (state, action) => {
+      if (action.type === 'RESET_FORM_PARTICIPANT') {
+        return undefined;
+      } else {
+        return state;
+      }
+    },
   }),
 });
 

@@ -14,3 +14,5 @@ export const userModalIsShow = () =>
   createSelector(selectorComponent, state => state.showModalUser);
 export const eventModalIsShow = () =>
   createSelector(selectorComponent, state => state.showModalEvent);
+export const participantModalIsShow = () =>
+  createSelector(selectorComponent, state => state.showModalParticipant);

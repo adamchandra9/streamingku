@@ -1,7 +1,9 @@
 import {
   ISetDetailEventAction,
   ISetEventModalAction,
+  ISetListParticipantAction,
   ISetSubmitEvent,
+  ISetSubmitParticipantAction,
   ISetUpdateEvent,
 } from './EventAction';
 
@@ -12,6 +14,7 @@ const initialState: any = {
   modalAction: 'register',
   list: eventData,
   detailEvent: null,
+  listParticipant: [],
 };
 
 export default function EventReducer(state = initialState, action: Action) {
@@ -49,6 +52,18 @@ export default function EventReducer(state = initialState, action: Action) {
       listEvent.splice(index, 1);
       listEvent.push(data);
       newState.list = listEvent;
+      return { ...newState };
+    }
+    case 'SET_LIST_PARTICIPANT': {
+      const setListParticipantAction = action as ISetListParticipantAction;
+      newState.listParticipant = setListParticipantAction.data;
+      return { ...newState };
+    }
+    case 'SUBMIT_PARTICIPANT': {
+      const setEventModalAction = action as ISetSubmitParticipantAction;
+      const listParticipant: any = state.listParticipant;
+      listParticipant.push(setEventModalAction.data);
+      newState.listParticipant = listParticipant;
       return { ...newState };
     }
   }

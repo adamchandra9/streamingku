@@ -10,10 +10,12 @@ import EventComponent from '../Component/EventComponent';
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { getFormValues } from 'redux-form';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 function EventContainer(props) {
-  const { componentAction, eventAction, detailEvent } = props;
+  const { componentAction, eventAction, formValues } = props;
   const addEventClick = () => {
     componentAction.openModal('Event');
     eventAction.setEventModalAction('register');
@@ -40,6 +42,7 @@ function EventContainer(props) {
     };
     const settingClick = () => {
       eventAction.setDetailevent(row.row.original);
+      eventAction.setListParticipant(row.row.original.participant);
       eventAction.setEventModalAction('register');
     };
     const dataButton = [
@@ -82,7 +85,17 @@ function EventContainer(props) {
       Cell: row => renderAction(row),
     },
   ];
+
+  //SETTING
+  const handleAddParicipant = () => {
+    componentAction.openModal('Participant');
+  };
   const renderActionParticipant = () => {
+    const copyLinkClick = () => {
+      navigator.clipboard.writeText('http://localhost:3000/user');
+      toast.success('Berhasil copy link');
+    };
+
     const dataButton = [
       {
         type: 'link',
@@ -95,16 +108,11 @@ function EventContainer(props) {
         className: 'btnTable',
         content: 'Copy Link',
         id: 'btnCopyLinkParticipant',
+        onClick: () => copyLinkClick(),
       },
     ];
     return <CButton buttonData={dataButton} />;
   };
-  const listParticipant: any = [];
-  if (detailEvent) {
-    for (const iterator of detailEvent.participant) {
-      listParticipant.push(iterator);
-    }
-  }
   const columnParticipant = [
     {
       Header: 'Name',
@@ -127,14 +135,27 @@ function EventContainer(props) {
       Cell: row => renderActionParticipant(),
     },
   ];
-  console.log(listParticipant);
-
+  const handleSubmit = () => {
+    componentAction.processLoading(true);
+    if (formValues) {
+      const dataParticipant: any = formValues;
+      dataParticipant.status = 'Offline';
+      eventAction.submitParticipant(dataParticipant);
+    }
+    componentAction.openModal('Participant');
+    eventAction.resetFormParticipant();
+    setTimeout(() => {
+      toast.success('Data Berhasil ditambahkan');
+      componentAction.processLoading(false);
+    }, 3000);
+  };
   return (
     <EventComponent
       column={column}
       columnParticipant={columnParticipant}
-      listParticipant={listParticipant}
       addEventClick={addEventClick}
+      handleAddParicipant={handleAddParicipant}
+      handleSubmit={handleSubmit}
       {...props}
     />
   );
@@ -144,6 +165,8 @@ const mapStateToProps = createStructuredSelector({
   list: SelectorEvent.makeListEventSelector(),
   modalAction: SelectorEvent.makeModalEventActionSelector(),
   detailEvent: SelectorEvent.makeDetailEventSelector(),
+  formValues: getFormValues('participant'),
+  listParticipant: SelectorEvent.makeListParticipantSelector(),
 });
 
 const mapDispatchToProps = dispatch => ({
