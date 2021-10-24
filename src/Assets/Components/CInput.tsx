@@ -103,12 +103,7 @@ export const InputSelect = ({
       label={labelTitle}
       colon={false}
     >
-      <Select
-        onChange={handleOnChange}
-        onBlur={input.onBlur}
-        id={idComponent}
-        value={input.value}
-      >
+      <Select onChange={handleOnChange} id={idComponent} value={input.value}>
         <Select.Option value="">{dafaultItemName}</Select.Option>
         {items}
       </Select>
