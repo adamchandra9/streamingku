@@ -7,13 +7,13 @@ import EventContainer from '../Modules/Event/Container/EventContainer';
 import { Helmet } from 'react-helmet';
 import React from 'react';
 import ReduxToastr from 'react-redux-toastr';
-import StarterPage from './../StarterPage';
 import TemplateContainer from '../Modules/Template/Container/TemplateContainer';
 import { ToastContainer } from 'react-toastify';
+import UserContainer from '../Modules/User/Container/UserContainer';
 import withTemplate from '../App/WithTemplate';
 
 function Navigation() {
-  const index = StarterPage;
+  const index = UserContainer;
   const dashboard = withTemplate(TemplateContainer, DashboardContainer);
   const event = withTemplate(TemplateContainer, EventContainer);
   return (

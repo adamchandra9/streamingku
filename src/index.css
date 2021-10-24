@@ -160,3 +160,43 @@ code {
   font-weight: 500;
   margin-top: 10px;
 }
+.contentLeft {
+  width: 90%;
+  height: 100vh;
+  float: left;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.youtube {
+  width: 70%;
+  height: 70%;
+}
+.contentRight {
+  width: 10%;
+  height: 100vh;
+  float: right;
+  background-color: #226597;
+  color: white;
+  padding: 10px;
+}
+.iconOnline {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: chartreuse;
+  display: inline-block;
+  margin-right: 10px;
+}
+.iconOffline {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: red;
+  display: inline-block;
+  margin-right: 10px;
+}
